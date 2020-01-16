@@ -9,7 +9,7 @@ router.get('/', restricted, async (req, res, next) => {
     const users = await usersModel.find()
     res.json(users)
   } catch (err) {
-
+    next(err)
   }
 })
 
