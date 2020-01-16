@@ -1,10 +1,15 @@
 const express = require('express')
 const usersModel = require('../users/users-model')
+const bcrypt = require('bcryptjs')
 
 const router = express.Router()
 
 router.post('/register', async (req, res, next) => {
   try {
+    const hash = bcrypt.hashSync(req.body.password, 14)
+
+    req.body.password = hash
+
     const saved = await usersModel.add(req.body)
 
     res.status(201).json(saved)
@@ -18,7 +23,7 @@ router.post('/login', async (req, res, next) => {
     const {username, password} = req.body
     const user = await usersModel.findBy({ username }).first()
 
-    if (user) {
+    if (user && bcrypt.compareSync(password, user.password)) {
       res.status(200).json({
         message: `Welcome ${user.username}!`,
       })
@@ -33,4 +38,4 @@ router.post('/login', async (req, res, next) => {
 })
 
 
-module.express = router
+module.exports = router

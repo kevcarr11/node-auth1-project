@@ -12,13 +12,13 @@ function find() {
     .select("id", "username")
 }
 
-function findBy() {
+function findBy(filter) {
   return db('users')
     .where(filter)
     .select("id", "username", "password")
 }
 
-function findById() {
+function findById(id) {
   return db("users")
   .where({ id })
   .first("id", "username")
